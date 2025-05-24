@@ -1,90 +1,108 @@
 package demo.quanliyte.test.entity;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "appointments")
-public class Appointment {
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 
+@Entity
+public class Appointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id; // Mã lịch hẹn
 
-    @NotBlank(message = "Tên bệnh nhân không được để trống")
-    @Column(name = "patient_name", nullable = false)
-    private String patientName;
+    @ManyToOne
+    private Patient patient; // Bệnh nhân đặt lịch hẹn
 
-    @NotNull(message = "Tuổi không được để trống")
-    @Min(value = 0)
-    @Max(value = 150)
-    @Column(nullable = false)
-    private Integer age;
+    @ManyToOne
+    private User doctor; // Bác sĩ phụ trách lịch hẹn (là user có vai trò DOCTOR)
 
-    @NotNull(message = "Ngày sinh không được để trống")
-    @Column(nullable = false)
-    private LocalDate dob;
+    private LocalDate appointmentDate; // Ngày khám (yyyy-MM-dd)
 
-    @NotBlank(message = "Loại khám không được để trống")
-    @Column(name = "appointment_type", nullable = false)
-    private String appointmentType;
+    private String timeSlot; // Khung giờ khám (ví dụ: "08:00 - 09:00")
 
-    @Column(name = "symptom_detail", columnDefinition = "TEXT")
-    private String symptomDetail;
+    private String department; // Chuyên khoa khám (ví dụ: "Nội tổng quát", "Tai mũi họng")
 
-    @NotNull(message = "Ngày giờ khám không được để trống")
-    @Column(name = "appointment_date", nullable = false)
-    private LocalDateTime appointmentDate;
+    private String reason; // Lý do đặt lịch (triệu chứng hoặc yêu cầu của bệnh nhân)
 
-    @NotBlank(message = "Địa chỉ không được để trống")
-    @Column(nullable = false)
-    private String address;
+    private String status; // Trạng thái lịch hẹn
 
-    @NotBlank(message = "Số điện thoại không được để trống")
-    @Pattern(regexp = "\\d{9,15}", message = "Số điện thoại hợp lệ từ 9 đến 15 số")
-    @Column(nullable = false)
-    private String phone;
+    private LocalDateTime createdAt; // Thời gian tạo lịch hẹn
 
-    @Column(nullable = false)
-    private String status = "SCHEDULED"; // Mặc định "Đã đặt"
+    public Long getId() {
+        return id;
+    }
 
-    // Getter & Setter
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    // Constructor mặc định
-    public Appointment() {}
+    public Patient getPatient() {
+        return patient;
+    }
 
-    // Các getter/setter tự động hoặc generate bằng IDE
+    public void setPatient(Patient patient) {
+        this.patient = patient;
+    }
 
-    // Ví dụ
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public User getDoctor() {
+        return doctor;
+    }
 
-    public String getPatientName() { return patientName; }
-    public void setPatientName(String patientName) { this.patientName = patientName; }
+    public void setDoctor(User doctor) {
+        this.doctor = doctor;
+    }
 
-    public Integer getAge() { return age; }
-    public void setAge(Integer age) { this.age = age; }
+    public LocalDate getAppointmentDate() {
+        return appointmentDate;
+    }
 
-    public LocalDate getDob() { return dob; }
-    public void setDob(LocalDate dob) { this.dob = dob; }
+    public void setAppointmentDate(LocalDate appointmentDate) {
+        this.appointmentDate = appointmentDate;
+    }
 
-    public String getAppointmentType() { return appointmentType; }
-    public void setAppointmentType(String appointmentType) { this.appointmentType = appointmentType; }
+    public String getTimeSlot() {
+        return timeSlot;
+    }
 
-    public String getSymptomDetail() { return symptomDetail; }
-    public void setSymptomDetail(String symptomDetail) { this.symptomDetail = symptomDetail; }
+    public void setTimeSlot(String timeSlot) {
+        this.timeSlot = timeSlot;
+    }
 
-    public LocalDateTime getAppointmentDate() { return appointmentDate; }
-    public void setAppointmentDate(LocalDateTime appointmentDate) { this.appointmentDate = appointmentDate; }
+    public String getDepartment() {
+        return department;
+    }
 
-    public String getAddress() { return address; }
-    public void setAddress(String address) { this.address = address; }
+    public void setDepartment(String department) {
+        this.department = department;
+    }
 
-    public String getPhone() { return phone; }
-    public void setPhone(String phone) { this.phone = phone; }
+    public String getReason() {
+        return reason;
+    }
 
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
 }

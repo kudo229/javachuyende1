@@ -7,69 +7,70 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Controller
 public class vidu {
-	@GetMapping("giaodien/home")
-	public String homePage() {
-	    return "giaodien/Home"; // tương ứng home.jsp trong /WEB-INF/views
-	}
-	
-	@GetMapping("giaodien/bacsi")
-	public String bacsiPage() {
-	    return "giaodien/bacsi"; // tương ứng home.jsp trong /WEB-INF/views
-	}
-	
+    @GetMapping("giaodien/home")
+    public String homePage() {
+        return "giaodien/Home"; // tương ứng home.jsp trong /WEB-INF/views
+    }
+
+    @GetMapping("giaodien/bacsi")
+    public String bacsiPage() {
+        return "giaodien/bacsi"; // tương ứng home.jsp trong /WEB-INF/views
+    }
+
     @GetMapping("giaodien/thuocvattu")
     public String showThuocVattuPage() {
         return "giaodien/thuoc_vattu"; // trả về thuoc-vattu.jsp
     }
+
     @GetMapping("giaodien/lichhenkham")
     public String lichhenkhamPage() {
-        return "giaodien/lichhenkham"; // trả về thuoc-vattu.jsp
+        return "giaodien/lichhenkham";
     }
-    
-	@GetMapping("giaodien/chaomung")
-	public String chaomung() {
-	    return "giaodien/chaomung"; // tương ứng home.jsp trong /WEB-INF/views
-	}
-	
-	@GetMapping("giaodien/madoctor")
-	public String doctorPage() {
-	    return "giaodien/manage_doctor"; // tương ứng home.jsp trong /WEB-INF/views
-	}
-	
-	@GetMapping("giaodien/mapatient")
-	public String patientPage() {
-	    return "giaodien/manage_patient"; // tương ứng home.jsp trong /WEB-INF/views
-	}
-	
-	@GetMapping("giaodien/updoctor")
-	public String updoctorPage() {
-	    return "giaodien/update_doctor"; // tương ứng home.jsp trong /WEB-INF/views
-	}
-	
-	@GetMapping("giaodien/uppatient")
-	public String uppatientPage() {
-	    return "giaodien/update_patient"; // tương ứng home.jsp trong /WEB-INF/views
-	}
-	
+
+    @GetMapping("giaodien/chaomung")
+    public String chaomung() {
+        return "giaodien/chaomung"; // tương ứng home.jsp trong /WEB-INF/views
+    }
+
+    @GetMapping("giaodien/madoctor")
+    public String doctorPage() {
+        return "giaodien/manage_doctor"; // tương ứng home.jsp trong /WEB-INF/views
+    }
+
+    @GetMapping("giaodien/mapatient")
+    public String patientPage() {
+        return "giaodien/manage_patient"; // tương ứng home.jsp trong /WEB-INF/views
+    }
+
+    @GetMapping("giaodien/updoctor")
+    public String updoctorPage() {
+        return "giaodien/update_doctor"; // tương ứng home.jsp trong /WEB-INF/views
+    }
+
+    @GetMapping("giaodien/uppatient")
+    public String uppatientPage() {
+        return "giaodien/update_patient"; // tương ứng home.jsp trong /WEB-INF/views
+    }
+
     @GetMapping("/login")
     public String login() {
         return "login"; // trả về login.jsp
     }
-    
+
     @GetMapping("/")
     public String loginForm() {
         return "admin/dashboard/show"; // trả về login.jsp
     }
 
-    @GetMapping("/quanlynguoidung")
-    public String userManage() {
-        return "admin/user/quanlynguoidung"; // trả về login.jsp
-    }
+    // @GetMapping("/quanlynguoidung")
+    // public String userManage() {
+    // return "admin/user/quanlynguoidung"; // trả về login.jsp
+    // }
 
-    @GetMapping("/quanlybenhnhan")
-    public String patienManage() {
-        return "admin/patient/quanlybenhnhan"; // trả về login.jsp
-    }
+    // @GetMapping("/quanlybenhnhan")
+    // public String patienManage() {
+    // return "admin/patient/quanlybenhnhan"; // trả về login.jsp
+    // }
 
     @GetMapping("/quanlybacsi")
     public String doctorManage() {

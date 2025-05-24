@@ -1,244 +1,251 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+	<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+		<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-<meta charset="UTF-8" />
-<title>Quản lý Lịch khám</title>
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-	rel="stylesheet" />
-<script
-	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<style>
-body {
-	background-color: #f8f9fa;
-}
-h2 {
-	margin-top: 20px;
-	margin-bottom: 30px;
-}
-</style>
-</head>
-<body>
-	<div class="container-fluid mt-4 px-5">
-		<h2>Quản lý Lịch khám</h2>
+			<!DOCTYPE html>
+			<html lang="vi">
 
-		<!-- Nút thêm lịch khám mới -->
-		<button class="btn btn-primary mb-4" id="btnAddAppointment"
-			data-bs-toggle="modal" data-bs-target="#appointmentModal">
-			Thêm lịch khám mới</button>
+			<head>
+				<meta charset="UTF-8" />
+				<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+				<title>Danh sách lịch hẹn</title>
+				<!-- Bootstrap CSS -->
+				<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+					integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+					crossorigin="anonymous" />
+				<!-- Google Fonts: Roboto -->
+				<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+					rel="stylesheet" />
 
-		<!-- Bảng danh sách lịch khám -->
-		<div class="table-responsive">
-			<table class="table table-bordered table-hover align-middle"
-				id="appointmentTable">
-				<thead class="table-dark">
-					<tr>
-						<th>ID</th>
-						<th>Bệnh nhân</th>
-						<th>Tuổi</th>
-						<th>Ngày sinh</th>
-						<th>Thông tin khám</th>
-						<th>Chi tiết bệnh tình</th>
-						<th>Ngày giờ khám</th>
-						<th>Địa chỉ</th>
-						<th>Số điện thoại</th>
-						<th>Hành động</th>
-					</tr>
-				</thead>
-				<tbody>
-					<c:forEach var="item" items="${appointments}">
-						<tr data-id="${item.id}" data-patientname="${item.patientName}"
-							data-age="${item.age}" data-dob="${item.dob}"
-							data-appointmenttype="${item.appointmentType}"
-							data-symptomdetail="${item.symptomDetail}"
-							data-appointmentdate="${item.appointmentDate?.toString().replace(' ', 'T')}"
-							data-address="${item.address}" data-phone="${item.phone}">
-							<td>${item.id}</td>
-							<td>${item.patientName}</td>
-							<td>${item.age}</td>
-							<td>${item.dob}</td>
-							<td>${item.appointmentType}</td>
-							<td>${item.symptomDetail}</td>
-							<td>${item.appointmentDate}</td>
-							<td>${item.address}</td>
-							<td>${item.phone}</td>
-							<td>
-								<button class="btn btn-sm btn-warning btn-edit"
-									data-bs-toggle="modal" data-bs-target="#appointmentModal">Sửa</button>
-								<a
-								href="${pageContext.request.contextPath}/admin/clinicschedule/delete/${item.id}"
-								class="btn btn-sm btn-danger"
-								onclick="return confirm('Bạn có chắc muốn xóa?')">Xoá</a>
-							</td>
-						</tr>
-					</c:forEach>
-				</tbody>
-			</table>
-		</div>
-	</div>
+				<style>
+					body {
+						font-family: 'Roboto', sans-serif;
+						background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+						min-height: 100vh;
+						display: flex;
+						justify-content: center;
 
-	<!-- Modal Thêm/Sửa lịch khám -->
-	<div class="modal fade" id="appointmentModal" tabindex="-1"
-		aria-labelledby="appointmentModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-xl">
-			<form class="needs-validation" novalidate method="post"
-				action="${pageContext.request.contextPath}/admin/clinicschedule/save">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="appointmentModalLabel">Thêm / Sửa
-							lịch khám</h5>
-						<button type="button" class="btn-close" data-bs-dismiss="modal"
-							aria-label="Đóng"></button>
+						margin: 0;
+					}
+
+					.container {
+						max-width: 1200px;
+						margin: 40px auto;
+						padding: 30px;
+						background: #ffffff;
+						border-radius: 12px;
+						box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+
+					}
+
+					h2 {
+						font-size: 2rem;
+						font-weight: 700;
+						color: #1a3c6d;
+						text-align: center;
+						margin-bottom: 30px;
+					}
+
+					.table {
+						border-radius: 8px;
+						overflow: hidden;
+						box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+					}
+
+					.table thead {
+						background-color: #1a73e8;
+						color: #ffffff;
+					}
+
+					.table th,
+					.table td {
+						padding: 12px 15px;
+						vertical-align: middle;
+						border: none;
+					}
+
+					.table tbody td {
+						border-bottom: 1px solid #dee2e6;
+					}
+
+					.table-responsive {
+						border-radius: 8px;
+					}
+
+					@media (max-width: 768px) {
+						.container {
+							margin: 20px;
+							padding: 20px;
+						}
+
+						h2 {
+							font-size: 1.5rem;
+						}
+
+						.table th,
+						.table td {
+							padding: 10px;
+							font-size: 0.9rem;
+						}
+					}
+				</style>
+			</head>
+
+			<body>
+				<div class="container">
+					<h2>Danh sách lịch hẹn</h2>
+
+					<!-- Search form -->
+					<form method="get" action="appointments"
+						class="mb-3 d-flex justify-content-between align-items-center">
+						<input type="text" name="keyword" placeholder="Tìm theo tên bệnh nhân..." value="${keyword}"
+							class="form-control me-2" style="max-width: 300px;" />
+						<button type="submit" class="btn btn-primary">Tìm kiếm</button>
+						<a href="appointments" class="btn btn-secondary ms-2">Xóa tìm kiếm</a>
+						<button type="button" class="btn btn-success ms-auto" data-bs-toggle="modal"
+							data-bs-target="#addAppointmentModal">
+							+ Thêm lịch hẹn mới
+						</button>
+					</form>
+					<!-- Modal Thêm lịch hẹn mới -->
+					<div class="modal fade" id="addAppointmentModal" tabindex="-1"
+						aria-labelledby="addAppointmentModalLabel" aria-hidden="true">
+						<div class="modal-dialog modal-lg">
+							<div class="modal-content">
+								<form:form modelAttribute="appointment" method="post" action="/appointments/save">
+									<div class="modal-header">
+										<h5 class="modal-title" id="addAppointmentModalLabel">Thêm lịch hẹn mới</h5>
+										<button type="button" class="btn-close" data-bs-dismiss="modal"
+											aria-label="Đóng"></button>
+									</div>
+									<div class="modal-body">
+										<div class="mb-3">
+											<label for="patientName" class="form-label">Tên bệnh nhân</label>
+											<input type="text" class="form-control" id="patientName" name="patientName"
+												required>
+										</div>
+										<!-- <select id="doctorId" name="doctor.id" class="form-select" required>
+										<option value="">Chọn bác sĩ</option>
+										<c:forEach var="doctor" items="${doctors}">
+											<option value="${doctor.id}">${doctor.name}</option>
+										</c:forEach>
+									</select> -->
+
+										<div class="mb-3">
+											<label for="doctorId" class="form-label">Bác sĩ</label>
+											<form:select path="doctor.id" cssClass="form-select" id="doctorId"
+												required="required">
+												<form:option value="" label="Chọn bác sĩ" />
+												<form:options items="${listDoctor}" itemValue="id" itemLabel="name" />
+											</form:select>
+										</div>
+
+
+										<div class="mb-3">
+											<label for="appointmentDate" class="form-label">Ngày khám</label>
+											<input type="date" class="form-control" id="appointmentDate"
+												name="appointmentDate" required>
+										</div>
+										<div class="form-group">
+											<label for="timeSlot" class="form-label">Khung giờ <span
+													class="text-danger">*</span></label>
+											<input type="time" id="timeSlot" name="timeSlot" class="form-control"
+												min="08:00" max="17:00" step="1800" required />
+											<div class="invalid-feedback">Vui lòng chọn khung giờ trong khoảng 08:00 -
+												17:00.</div>
+										</div>
+
+										<div class="form-group">
+											<label for="department" class="form-label">Chuyên khoa <span
+													class="text-danger">*</span></label>
+											<select id="department" name="department" class="form-select" required>
+												<option value="">Chọn chuyên khoa</option>
+												<option value="Nội khoa">Nội khoa</option>
+												<option value="Ngoại khoa">Ngoại khoa</option>
+												<option value="Nhi khoa">Nhi khoa</option>
+												<option value="Sản khoa">Sản khoa</option>
+												<option value="Răng hàm mặt">Răng hàm mặt</option>
+											</select>
+											<div class="invalid-feedback">Vui lòng chọn chuyên khoa.</div>
+										</div>
+										<div class="mb-3">
+											<label for="reason" class="form-label">Lý do</label>
+											<textarea class="form-control" id="reason" name="reason" rows="3"
+												required></textarea>
+										</div>
+										<div class="mb-3">
+											<label for="status" class="form-label">Trạng thái</label>
+											<select class="form-select" id="status" name="status" required>
+												<option value="Chưa khám">Chưa khám</option>
+												<option value="Đã khám">Đã khám</option>
+											</select>
+										</div>
+										<!-- Nếu cần ngày tạo mặc định server xử lý, không cần nhập ở đây -->
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-secondary"
+											data-bs-dismiss="modal">Đóng</button>
+										<button type="submit" class="btn btn-primary">Lưu lịch hẹn</button>
+									</div>
+								</form:form>
+							</div>
+						</div>
 					</div>
-					<div class="modal-body">
-						<input type="hidden" id="appointmentId" name="id" />
 
-						<div class="row mb-3">
-							<div class="col-md-6">
-								<label for="patientName" class="form-label">Họ và Tên <span
-									class="text-danger">*</span></label> <input type="text"
-									class="form-control" id="patientName" name="patientName"
-									placeholder="Nhập họ và tên bệnh nhân" required>
-								<div class="invalid-feedback">Vui lòng nhập họ và tên.</div>
-							</div>
-							<div class="col-md-3">
-								<label for="age" class="form-label">Tuổi <span
-									class="text-danger">*</span></label> <input type="number"
-									class="form-control" id="age" name="age" min="0" max="150"
-									required>
-								<div class="invalid-feedback">Vui lòng nhập tuổi hợp lệ.</div>
-							</div>
-							<div class="col-md-3">
-								<label for="dob" class="form-label">Ngày sinh <span
-									class="text-danger">*</span></label> <input type="date"
-									class="form-control" id="dob" name="dob" required>
-								<div class="invalid-feedback">Vui lòng chọn ngày sinh.</div>
-							</div>
-						</div>
 
-						<div class="mb-3">
-							<label for="appointmentType" class="form-label">Thông tin
-								khám <span class="text-danger">*</span>
-							</label> <select class="form-select" id="appointmentType"
-								name="appointmentType" required>
-								<option value="" selected disabled>Chọn loại khám</option>
-								<option value="Khám tổng quát">Khám tổng quát</option>
-								<option value="Khám chuyên khoa">Khám chuyên khoa</option>
-								<option value="Khám tai mũi họng">Khám tai mũi họng</option>
-								<option value="Khám sản phụ khoa">Khám sản phụ khoa</option>
-								<option value="Khám nhi khoa">Khám nhi khoa</option>
-							</select>
-							<div class="invalid-feedback">Vui lòng chọn loại khám.</div>
-						</div>
-
-						<div class="mb-3">
-							<label for="symptomDetail" class="form-label">Chi tiết
-								bệnh tình <span class="text-danger">*</span>
-							</label>
-							<textarea class="form-control" id="symptomDetail"
-								name="symptomDetail" rows="3"
-								placeholder="Mô tả triệu chứng hoặc tình trạng bệnh" required></textarea>
-							<div class="invalid-feedback">Vui lòng nhập chi tiết bệnh
-								tình.</div>
-						</div>
-
-						<div class="mb-3">
-							<label for="appointmentDate" class="form-label">Thời gian
-								khám <span class="text-danger">*</span>
-							</label> <input type="datetime-local" class="form-control"
-								id="appointmentDate" name="appointmentDate" required>
-							<div class="invalid-feedback">Vui lòng chọn thời gian khám.</div>
-						</div>
-
-						<div class="mb-3">
-							<label for="address" class="form-label">Địa chỉ <span
-								class="text-danger">*</span></label> <input type="text"
-								class="form-control" id="address" name="address"
-								placeholder="Nhập địa chỉ liên hệ" required>
-							<div class="invalid-feedback">Vui lòng nhập địa chỉ.</div>
-						</div>
-
-						<div class="mb-3">
-							<label for="phone" class="form-label">Số điện thoại <span
-								class="text-danger">*</span></label> <input type="tel"
-								class="form-control" id="phone" name="phone"
-								pattern="[0-9]{9,15}" placeholder="Nhập số điện thoại liên hệ"
-								required>
-							<div class="invalid-feedback">Vui lòng nhập số điện thoại
-								hợp lệ (9-15 số).</div>
-						</div>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary"
-							data-bs-dismiss="modal">Hủy</button>
-						<button type="submit" class="btn btn-primary">Lưu lịch
-							khám</button>
+					<div class="table-responsive">
+						<table class="table table-hover align-middle">
+							<thead>
+								<tr>
+									<th scope="col">ID</th>
+									<th scope="col">Bệnh nhân</th>
+									<th scope="col">Bác sĩ</th>
+									<th scope="col">Ngày khám</th>
+									<th scope="col">Khung giờ</th>
+									<th scope="col">Chuyên khoa</th>
+									<th scope="col">Lý do</th>
+									<th scope="col">Trạng thái</th>
+									<th scope="col">Ngày tạo</th>
+									<th scope="col" style="min-width: 120px;">Hành động</th>
+								</tr>
+							</thead>
+							<tbody>
+								<c:forEach var="a" items="${appointments}">
+									<tr>
+										<td>${a.id}</td>
+										<td>${a.patient.name}</td>
+										<td>${a.doctor.name}</td>
+										<td>${a.appointmentDate}</td>
+										<td>${a.timeSlot}</td>
+										<td>${a.department}</td>
+										<td>${a.reason}</td>
+										<td>${a.status}</td>
+										<td>${a.createdAt}</td>
+										<td>
+											<a href="appointments/edit/${a.id}"
+												class="btn btn-sm btn-warning me-1">Sửa</a>
+											<a href="appointments/delete/${a.id}" class="btn btn-sm btn-danger"
+												onclick="return confirm('Bạn có chắc muốn xóa lịch hẹn này?');">Xóa</a>
+										</td>
+									</tr>
+								</c:forEach>
+								<c:if test="${empty appointments}">
+									<tr>
+										<td colspan="10" class="text-center">Không có lịch hẹn nào</td>
+									</tr>
+								</c:if>
+							</tbody>
+						</table>
 					</div>
 				</div>
-			</form>
-		</div>
-	</div>
 
-	<script>
-(() => {
-  'use strict';
-  const form = document.querySelector('.needs-validation');
+				<!-- Bootstrap JS bundle -->
+				<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+					integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+					crossorigin="anonymous">
+					</script>
 
-  form.addEventListener('submit', event => {
-    if (!form.checkValidity()) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-    form.classList.add('was-validated');
-  }, false);
+			</body>
 
-  const editButtons = document.querySelectorAll('.btn-edit');
-  const appointmentId = document.getElementById('appointmentId');
-  const patientName = document.getElementById('patientName');
-  const age = document.getElementById('age');
-  const dob = document.getElementById('dob');
-  const appointmentType = document.getElementById('appointmentType');
-  const symptomDetail = document.getElementById('symptomDetail');
-  const appointmentDate = document.getElementById('appointmentDate');
-  const address = document.getElementById('address');
-  const phone = document.getElementById('phone');
 
-  editButtons.forEach(button => {
-    button.addEventListener('click', () => {
-      const tr = button.closest('tr');
-      appointmentId.value = tr.dataset.id || '';
-      patientName.value = tr.dataset.patientname || '';
-      age.value = tr.dataset.age || '';
-      dob.value = tr.dataset.dob || '';
-      appointmentType.value = tr.dataset.appointmenttype || '';
-      symptomDetail.value = tr.dataset.symptomdetail || '';
-      appointmentDate.value = tr.dataset.appointmentdate || '';
-      address.value = tr.dataset.address || '';
-      phone.value = tr.dataset.phone || '';
-
-      patientName.focus();
-      form.classList.remove('was-validated');
-    });
-  });
-
-  document.getElementById('btnAddAppointment').addEventListener('click', () => {
-    appointmentId.value = '';
-    patientName.value = '';
-    age.value = '';
-    dob.value = '';
-    appointmentType.value = '';
-    symptomDetail.value = '';
-    appointmentDate.value = '';
-    address.value = '';
-    phone.value = '';
-
-    form.classList.remove('was-validated');
-  });
-})();
-</script>
-
-</body>
-</html>
+			</html>
